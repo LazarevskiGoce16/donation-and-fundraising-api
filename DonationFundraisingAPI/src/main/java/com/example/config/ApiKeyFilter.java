@@ -17,25 +17,28 @@ public class ApiKeyFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-        throws IOException, ServletException {
+            throws IOException, ServletException {
 
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        String path = httpServletRequest.getRequestURI();
+        String path = httpRequest.getRequestURI();
 
-        if (path.startsWith("/h2-console")) {
+        if (path.startsWith("/h2-console") || "OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {
             chain.doFilter(request, response);
             return;
         }
 
-        String apiKey = httpServletRequest.getHeader(API_KEY_HEADER);
+        String apiKey = httpRequest.getHeader(API_KEY_HEADER);
 
-        if (validApiKey.equals(apiKey)) {
+        if (validApiKey != null && validApiKey.equals(apiKey)) {
             chain.doFilter(request, response);
         } else {
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            httpServletResponse.getWriter().write("Unauthorized: Invalid or missing API Key!");
+            httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            httpResponse.setContentType("text/plain");
+            httpResponse.getWriter().write("Unauthorized: Invalid or missing API Key!");
+            System.out.println("Unauthorized request to " + path + " with API key: " + apiKey);
         }
     }
 }
+
