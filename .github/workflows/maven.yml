@@ -26,9 +26,14 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file DonationFundraisingAPI/pom.xml clean install
+      run: mvn clean package spring-boot:repackage -f DonationFundraisingAPI/pom.xml -B
+
     - name: Install lsof
       run: sudo apt-get update && sudo apt-get install -y lsof
+
+    - name: Verify executable JAR contents
+      run: jar tf ./DonationFundraisingAPI/target/*.jar | head -40
+
     - name: Run jar (kill existing process first)
       run: |
         echo "Finding PID on port 8080..."
@@ -39,19 +44,20 @@ jobs:
         else
           echo "No process found using port 8080"
         fi
-        
+
         echo "Listing files in target directory:"
         ls -l ./DonationFundraisingAPI/target
-        
+
         JAR_FILE=$(ls ./DonationFundraisingAPI/target/*.jar | head -n 1)
-        
+
         if [ -z "$JAR_FILE" ]; then
           echo "Error: No JAR file found!"
           exit 1
         fi
-        
+
         echo "Running JAR file: $JAR_FILE"
         sudo java -jar "$JAR_FILE" || { echo "Failed to run jar file"; exit 1; }
+      
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
