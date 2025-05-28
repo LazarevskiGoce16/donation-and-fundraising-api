@@ -27,6 +27,8 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file DonationFundraisingAPI/pom.xml clean install
+    - name: Install lsof
+      run: sudo apt-get update && sudo apt-get install -y lsof
     - name: Kill process on port 8080 and run JAR
       shell: bash
       run: |
