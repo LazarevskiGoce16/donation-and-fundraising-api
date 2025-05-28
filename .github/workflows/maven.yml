@@ -29,31 +29,29 @@ jobs:
       run: mvn -B package --file DonationFundraisingAPI/pom.xml clean install
     - name: Install lsof
       run: sudo apt-get update && sudo apt-get install -y lsof
-    - name: Kill process on port 8080 and run JAR
-      shell: bash
+    - name: Run jar (kill existing process first)
       run: |
         echo "Finding PID on port 8080..."
-        PID=$(sudo lsof -t -i:8080)
+        PID=$(sudo lsof -t -i:8080 || true)
         if [ -n "$PID" ]; then
           echo "Killing process on port 8080 with PID: $PID"
           sudo kill -9 "$PID"
         else
           echo "No process found using port 8080"
         fi
-
+        
         echo "Listing files in target directory:"
-        ls -l /home/ubuntu/actions-runner/_work/donation-and-fundraising-api/donation-and-fundraising-api/DonationFundraisingAPI/target
-
-        # Get the first JAR file only (if multiple exist)
-        JAR_FILE=$(ls /home/ubuntu/actions-runner/_work/donation-and-fundraising-api/donation-and-fundraising-api/DonationFundraisingAPI/target/*.jar | head -n 1)
-
+        ls -l ./DonationFundraisingAPI/target
+        
+        JAR_FILE=$(ls ./DonationFundraisingAPI/target/*.jar | head -n 1)
+        
         if [ -z "$JAR_FILE" ]; then
           echo "Error: No JAR file found!"
           exit 1
         fi
-
+        
         echo "Running JAR file: $JAR_FILE"
-        sudo java -jar "$JAR_FILE"
+        sudo java -jar "$JAR_FILE" || { echo "Failed to run jar file"; exit 1; }
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
