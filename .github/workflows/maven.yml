@@ -35,7 +35,7 @@ jobs:
         else
           echo "No process found using port 8080"
         fi
-        sudo java -jar /home/ubuntu/actions-runner/_work/donation-and-fundraising-api/donation-and-fundraising-api/DonationFundraisingAPI/target/*.jar  
+        sudo java -jar /home/ubuntu/actions-runner/_work/donation-and-fundraising-api/donation-and-fundraising-api/DonationFundraisingAPI/target/DonationFundraisingAPI-1.0.0.jar  
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
