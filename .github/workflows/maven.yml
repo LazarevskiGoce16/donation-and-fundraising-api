@@ -27,15 +27,24 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file DonationFundraisingAPI/pom.xml clean install
-    - name: Execute Jar File
+    - name: Run Jar file
       run: |
         PID=$(sudo lsof -t -i:8080)
         if [ -n "$PID" ]; then
+          echo "Killing process on port 8080 with PID: $PID"
           sudo kill -9 "$PID"
         else
           echo "No process found using port 8080"
         fi
-        sudo java -jar /home/ubuntu/actions-runner/_work/donation-and-fundraising-api/donation-and-fundraising-api/DonationFundraisingAPI/target/DonationFundraisingAPI-1.0.0.jar  
+        JAR_FILE=$(ls /home/ubuntu/actions-runner/_work/donation-and-fundraising-api/donation-and-fundraising-api/DonationFundraisingAPI/target/*.jar)
+        if [ -f "$JAR_FILE" ]; then
+          echo "Running JAR file: $JAR_FILE"
+          sudo java -jar "$JAR_FILE"
+        else
+          echo "Error: JAR file not found!"
+          exit 1
+        fi
+      shell: bash
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
