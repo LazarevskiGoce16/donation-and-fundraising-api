@@ -25,9 +25,9 @@ public class ReceiptController {
         return ResponseEntity.ok(receiptService.getById(id));
     }
 
-    @PostMapping("/{donationId}/send")
-    public ResponseEntity<Receipt> create(@PathVariable Long donationId, @RequestParam String email) {
-        Receipt receipt = receiptService.createReceipt(donationId, email);
+    @PostMapping
+    public ResponseEntity<Receipt> create(@RequestBody Receipt request) {
+        Receipt receipt = receiptService.createReceipt(request.getDonation().getId(), request.getEmailSentTo());
         return new ResponseEntity<>(receipt, HttpStatus.CREATED);
     }
 
