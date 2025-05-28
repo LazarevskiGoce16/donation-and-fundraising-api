@@ -27,8 +27,10 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file DonationFundraisingAPI/pom.xml clean install
-    - name: Run Jar file
+    - name: Kill process on port 8080 and run JAR
+      shell: bash
       run: |
+        echo "Finding PID on port 8080..."
         PID=$(sudo lsof -t -i:8080)
         if [ -n "$PID" ]; then
           echo "Killing process on port 8080 with PID: $PID"
@@ -36,15 +38,20 @@ jobs:
         else
           echo "No process found using port 8080"
         fi
-        JAR_FILE=$(ls /home/ubuntu/actions-runner/_work/donation-and-fundraising-api/donation-and-fundraising-api/DonationFundraisingAPI/target/*.jar)
-        if [ -f "$JAR_FILE" ]; then
-          echo "Running JAR file: $JAR_FILE"
-          sudo java -jar "$JAR_FILE"
-        else
-          echo "Error: JAR file not found!"
+
+        echo "Listing files in target directory:"
+        ls -l /home/ubuntu/actions-runner/_work/donation-and-fundraising-api/donation-and-fundraising-api/DonationFundraisingAPI/target
+
+        # Get the first JAR file only (if multiple exist)
+        JAR_FILE=$(ls /home/ubuntu/actions-runner/_work/donation-and-fundraising-api/donation-and-fundraising-api/DonationFundraisingAPI/target/*.jar | head -n 1)
+
+        if [ -z "$JAR_FILE" ]; then
+          echo "Error: No JAR file found!"
           exit 1
         fi
-      shell: bash
+
+        echo "Running JAR file: $JAR_FILE"
+        sudo java -jar "$JAR_FILE"
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
