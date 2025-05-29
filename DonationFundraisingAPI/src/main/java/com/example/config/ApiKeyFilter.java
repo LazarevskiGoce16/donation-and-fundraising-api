@@ -24,7 +24,10 @@ public class ApiKeyFilter implements Filter {
 
         String path = httpRequest.getRequestURI();
 
-        if (path.startsWith("/h2-console") || "OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {
+        if (
+                path.startsWith("/h2-console") ||
+                path.startsWith("/status") ||
+                "OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {
             chain.doFilter(request, response);
             return;
         }
