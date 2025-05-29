@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public class Campaign {
     private LocalDateTime endDate;
 
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Donation> donations;
 
     public Campaign() {}

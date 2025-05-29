@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class Donor {
     private String phone;
 
     @OneToMany(mappedBy = "donor", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Donation> donations;
 
     public Donor() {
