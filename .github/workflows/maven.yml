@@ -62,7 +62,7 @@ jobs:
     - name: Verify executable JAR contents
       run: jar tf ./DonationFundraisingAPI/target/*.jar | head -40
 
-    - name: Run jar (kill existing process first)
+    - name: Run jar in background and wait briefly
       run: |
         echo "Finding PID on port 8080..."
         PID=$(sudo lsof -t -i:8080 || true)
@@ -83,9 +83,24 @@ jobs:
           exit 1
         fi
 
-        echo "Running JAR file: $JAR_FILE"
-        sudo java -jar "$JAR_FILE" || { echo "Failed to run jar file"; exit 1; }
-      
+        echo "Running JAR file: $JAR_FILE in background"
+        nohup sudo java -jar "$JAR_FILE" > app.log 2>&1 &
+
+        echo "Waiting for 10 seconds to allow the app to start..."
+        sleep 10
+
+        echo "Last 20 lines of application log:"
+        tail -n 20 app.log  
+
+    - name: Stop Spring Boot app
+      run: |
+        PID=$(sudo lsof -t -i:8080 || true)
+        if [ -n "$PID" ]; then
+          echo "Stopping app with PID: $PID"
+          sudo kill "$PID"
+        else
+          echo "No process found on port 8080"
+        fi
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
