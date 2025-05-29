@@ -28,32 +28,31 @@ jobs:
     - name: Create application.properties
       run: |
         mkdir -p DonationFundraisingAPI/src/main/resources
-        cat <<EOF > DonationFundraisingAPI/src/main/resources/application.properties
-        server.port=8080
+        echo -e " 
+        server.port=8080\n
         
-        security.api.key=d2acd0bb-a886-42d4-9b37-64acb48fb600
+        security.api.key=d2acd0bb-a886-42d4-9b37-64acb48fb600\n
         
-        spring.datasource.url=jdbc:h2:mem:fundraisingdb
-        spring.datasource.driverClassName=org.h2.Driver
-        spring.datasource.username=sa
-        spring.datasource.password=password
-        spring.datasource.initialization-mode=always
+        spring.datasource.url=jdbc:h2:mem:fundraisingdb\n
+        spring.datasource.driverClassName=org.h2.Driver\n
+        spring.datasource.username=sa\n
+        spring.datasource.password=password\n
+        spring.datasource.initialization-mode=always\n
         
-        spring.h2.console.enabled=true
-        spring.h2.console.path=/h2-console
+        spring.h2.console.enabled=true\n
+        spring.h2.console.path=/h2-console\n
         
-        spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
-        spring.jpa.hibernate.ddl-auto=none
-        spring.jpa.show-sql=true
-        spring.jpa.properties.hibernate.format_sql=true
+        spring.jpa.database-platform=org.hibernate.dialect.H2Dialect\n
+        spring.jpa.hibernate.ddl-auto=none\n
+        spring.jpa.show-sql=true\n
+        spring.jpa.properties.hibernate.format_sql=true\n
         
-        spring.sql.init.mode=always
+        spring.sql.init.mode=always\n
         
-        logging.level.org.springframework=INFO
-        logging.level.com.yourorg.fundraising=DEBUG
+        logging.level.org.springframework=INFO\n
+        logging.level.com.yourorg.fundraising=DEBUG\n
         
-        debug=true
-        EOF
+        debug=true" > DonationFundraisingAPI/src/main/resources/application.properties
     - name: Build with Maven
       run: mvn clean package spring-boot:repackage -f DonationFundraisingAPI/pom.xml -B
 
