@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ public class Receipt {
 
     @OneToOne
     @JoinColumn(name = "donation_id")
+    @JsonIgnore
     private Donation donation;
 
     public Long getId() {
