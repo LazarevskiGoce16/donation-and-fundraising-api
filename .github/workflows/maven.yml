@@ -75,14 +75,6 @@ jobs:
         else
           echo "No process found using port ${{ vars.SERVER_PORT }}"
         fi
-        echo "Finding PID on port 8080..."
-        PID=$(sudo lsof -t -i:8080 || true)
-        if [ -n "$PID" ]; then
-          echo "Killing process on port 8080 with PID: $PID"
-          sudo kill -9 "$PID"
-        else
-          echo "No process found using port 8080"
-        fi
 
         echo "Listing files in target directory:"
         ls -l ./DonationFundraisingAPI/target
@@ -111,14 +103,6 @@ jobs:
           sudo kill "$PID"
         else
           echo "No process found on port ${{ vars.SERVER_PORT }}"
-        fi
-        echo "Finding PID on port 8080..."
-        PID=$(sudo lsof -t -i:8080 || true)
-        if [ -n "$PID" ]; then
-          echo "Stopping app with PID: $PID"
-          sudo kill "$PID"
-        else
-          echo "No process found using port 8080"
         fi
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
