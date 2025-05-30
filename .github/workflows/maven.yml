@@ -30,7 +30,7 @@ jobs:
         cache: maven
     - name: Create application.properties
       with:
-        server_port: ${{ variables.SERVER_PORT }}
+        server_port: ${{ vars.SERVER_PORT }}
       run: |
         mkdir -p DonationFundraisingAPI/src/main/resources
         echo -e " 
