@@ -29,12 +29,10 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Create application.properties
-      with:
-        server_port: ${{ vars.SERVER_PORT }}
       run: |
         mkdir -p DonationFundraisingAPI/src/main/resources
         echo -e " 
-        server.port=$server_port\n
+        server.port=${{ vars.SERVER_PORT }}\n
         
         security.api.key=d2acd0bb-a886-42d4-9b37-64acb48fb600\n
         
