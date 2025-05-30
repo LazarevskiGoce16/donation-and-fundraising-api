@@ -34,12 +34,12 @@ jobs:
         echo -e " 
         server.port=${{ vars.SERVER_PORT }}\n
         
-        security.api.key=d2acd0bb-a886-42d4-9b37-64acb48fb600\n
+        security.api.key=${{ secrets.X_API_KEY }}\n
         
-        spring.datasource.url=jdbc:h2:mem:fundraisingdb\n
+        spring.datasource.url=jdbc:h2:mem:${{ vars.DB_NAME }}\n
         spring.datasource.driverClassName=org.h2.Driver\n
-        spring.datasource.username=sa\n
-        spring.datasource.password=password\n
+        spring.datasource.username=${{ vars.USERNAME }}\n
+        spring.datasource.password=${{ secrets.PASSWORD }}\n
         spring.datasource.initialization-mode=always\n
         
         spring.h2.console.enabled=true\n
