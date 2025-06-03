@@ -66,13 +66,25 @@ spring.h2.console.path=/h2-console
 http://localhost:8080/h2-console
 ```
 
+### and for the public domain navigate to:
+
+```bash
+http://dnf-api.sourcico.click/status
+```
+
 ## Using the API
 
 ### All requests must include the X-API-Key header with the correct API key.
 ### Example with curl:
 
 ```bash
-curl -H "X-API-Key: your-secure-api-key" http://localhost:8080/api/campaigns
+curl -H "X-API-Key: your-secure-api-key" http://localhost:8080/campaigns
+```
+
+### Example for the public domain:
+
+```bash
+curl -H "X-API-Key: your-secure-api-key" http://dnf-api.sourcico.click/campaigns
 ```
 
 ## Project Structure
