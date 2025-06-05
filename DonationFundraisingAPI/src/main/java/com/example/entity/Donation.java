@@ -27,11 +27,18 @@ public class Donation {
     @OneToOne(mappedBy = "donation", cascade = CascadeType.ALL)
     private Receipt receipt;
 
-    public Donation() {}
+    public Donation() {
+        this.donationTime = LocalDateTime.now();
+    }
 
-    public Donation(double amount, LocalDateTime donationTime) {
+    public Donation(
+            double amount,
+            Campaign campaign,
+            Donor donor) {
+        this();
         this.amount = amount;
-        this.donationTime = donationTime;
+        this.campaign = campaign;
+        this.donor = donor;
     }
 
     public Long getId() {
@@ -80,5 +87,8 @@ public class Donation {
 
     public void setReceipt(Receipt receipt) {
         this.receipt = receipt;
+        if (receipt != null && receipt.getDonation() != this) {
+            receipt.setDonation(this);
+        }
     }
 }

@@ -1,9 +1,12 @@
 package com.example.service;
 
+import com.example.dto.DonationRequestDto;
 import com.example.entity.Campaign;
 import com.example.entity.Donation;
+import com.example.entity.Donor;
 import com.example.exception.ResourceNotFoundException;
 import com.example.repository.DonationRepository;
+import com.example.repository.DonorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,18 +19,35 @@ public class DonationService {
     private DonationRepository donationRepository;
     @Autowired
     private CampaignService campaignService;
+    @Autowired
+    private DonorRepository donorRepository;
 
     public List<Donation> getDonationsForCampaign(Long campaignId) {
         return donationRepository.findByCampaignId(campaignId);
     }
 
-    public Donation donate(Long campaignId, Donation donation) {
-        Campaign campaign = campaignService.findById(campaignId);
-        donation.setCampaign(campaign);
-        donation.setDonationTime(LocalDateTime.now());
+    public Donation donate(DonationRequestDto dto) {
+        Campaign campaign = campaignService.findById(dto.getCampaignId());
 
-        campaign.setCollectedAmount(campaign.getCollectedAmount() + donation.getAmount());
-        return donationRepository.save(donation);
+        if (campaign == null) {
+            throw new ResourceNotFoundException("Valid campaign must be provided");
+        }
+
+        Donor donor = donorRepository.findById(dto.getDonorId())
+                .orElseThrow(() -> new ResourceNotFoundException("Donor not found"));
+
+        System.out.println(campaign.getId() + campaign.getTitle());
+        System.out.println(donor.getId() + donor.getFullName());
+
+        Donation donation = new Donation(
+                dto.getAmount(),
+                campaign,
+                donor
+        );
+         donationRepository.save(donation);
+//        campaign.setCollectedAmount(campaign.getCollectedAmount() + donation.getAmount());
+
+        return donation;
     }
 
     public void delete(Long donationId) {
