@@ -32,14 +32,14 @@ jobs:
       run: |
         mkdir -p DonationFundraisingAPI/src/main/resources
         echo -e " 
-        server.port=8080\n
+        server.port=${{ vars.SERVER_PORT }}\n
         
-        security.api.key=d2acd0bb-a886-42d4-9b37-64acb48fb600\n
+        security.api.key=${{ secrets.X_API_KEY }}\n
         
-        spring.datasource.url=jdbc:h2:mem:fundraisingdb\n
+        spring.datasource.url=jdbc:h2:mem:${{ vars.DB_NAME }}\n
         spring.datasource.driverClassName=org.h2.Driver\n
-        spring.datasource.username=sa\n
-        spring.datasource.password=password\n
+        spring.datasource.username=${{ vars.USERNAME }}\n
+        spring.datasource.password=${{ secrets.PASSWORD }}\n
         spring.datasource.initialization-mode=always\n
         
         spring.h2.console.enabled=true\n
@@ -67,13 +67,13 @@ jobs:
 
     - name: Run jar in background and wait briefly
       run: |
-        echo "Finding PID on port 8080..."
-        PID=$(sudo lsof -t -i:8080 || true)
+        echo "Finding PID on port ${{ vars.SERVER_PORT }}..."
+        PID=$(sudo lsof -t -i:${{ vars.SERVER_PORT }} || true)
         if [ -n "$PID" ]; then
-          echo "Killing process on port 8080 with PID: $PID"
+          echo "Killing process on port ${{ vars.SERVER_PORT }} with PID: $PID"
           sudo kill -9 "$PID"
         else
-          echo "No process found using port 8080"
+          echo "No process found using port ${{ vars.SERVER_PORT }}"
         fi
 
         echo "Listing files in target directory:"
@@ -97,12 +97,12 @@ jobs:
 
     - name: Stop Spring Boot app
       run: |
-        PID=$(sudo lsof -t -i:8080 || true)
+        PID=$(sudo lsof -t -i:${{ vars.SERVER_PORT }} || true)
         if [ -n "$PID" ]; then
           echo "Stopping app with PID: $PID"
           sudo kill "$PID"
         else
-          echo "No process found on port 8080"
+          echo "No process found on port ${{ vars.SERVER_PORT }}"
         fi
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
