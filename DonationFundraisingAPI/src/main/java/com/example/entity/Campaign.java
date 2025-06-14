@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,28 +16,29 @@ public class Campaign {
     private String title;
     private String description;
     private double goalAmount;
-    private double collectedAmount = 0.0;
+    private double collectedAmount;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Donation> donations;
+    private List<Donation> donations = new ArrayList<>();
 
     public Campaign() {}
 
     public Campaign(String title,
                     String description,
                     double goalAmount,
-                    double collectedAmount,
                     LocalDateTime startDate,
-                    LocalDateTime endDate) {
+                    LocalDateTime endDate,
+                    List<Donation> donations) {
         this.title = title;
         this.description = description;
         this.goalAmount = goalAmount;
-        this.collectedAmount = collectedAmount;
+        this.collectedAmount = 0.0;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.donations = donations != null ? donations : new ArrayList<>();
     }
 
     public Long getId() {
@@ -101,5 +103,10 @@ public class Campaign {
 
     public void setDonations(List<Donation> donations) {
         this.donations = donations;
+    }
+
+    public void addDonation(Donation donation) {
+        donations.add(donation);
+        donation.setCampaign(this);
     }
 }

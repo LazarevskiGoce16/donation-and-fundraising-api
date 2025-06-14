@@ -36,7 +36,7 @@ public class DonationController {
 
     @PostMapping
     public ResponseEntity<Donation> create(@Valid @RequestBody DonationRequestDto dto) {
-        return new ResponseEntity<>(donationService.donate(dto), HttpStatus.CREATED);
+        return new ResponseEntity<>(donationService.create(dto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

@@ -6,11 +6,9 @@ import com.example.entity.Donation;
 import com.example.entity.Donor;
 import com.example.exception.ResourceNotFoundException;
 import com.example.repository.DonationRepository;
-import com.example.repository.DonorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,24 +18,24 @@ public class DonationService {
     @Autowired
     private CampaignService campaignService;
     @Autowired
-    private DonorRepository donorRepository;
+    private DonorService donorService;
 
     public List<Donation> getDonationsForCampaign(Long campaignId) {
         return donationRepository.findByCampaignId(campaignId);
     }
 
-    public Donation donate(DonationRequestDto dto) {
+    public Donation create(DonationRequestDto dto) {
         Campaign campaign = campaignService.findById(dto.getCampaignId());
 
         if (campaign == null) {
             throw new ResourceNotFoundException("Valid campaign must be provided");
         }
 
-        Donor donor = donorRepository.findById(dto.getDonorId())
-                .orElseThrow(() -> new ResourceNotFoundException("Donor not found"));
+        Donor donor = donorService.findById(dto.getDonorId());
 
-        System.out.println(campaign.getId() + campaign.getTitle());
-        System.out.println(donor.getId() + donor.getFullName());
+        if (donor == null) {
+            throw new ResourceNotFoundException("Valid donor must be provided");
+        }
 
         Donation donation = new Donation(
                 dto.getAmount(),
@@ -45,7 +43,6 @@ public class DonationService {
                 donor
         );
          donationRepository.save(donation);
-//        campaign.setCollectedAmount(campaign.getCollectedAmount() + donation.getAmount());
 
         return donation;
     }

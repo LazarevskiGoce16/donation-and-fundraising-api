@@ -19,6 +19,14 @@ public class Receipt {
     @JsonIgnore
     private Donation donation;
 
+    public Receipt() {}
+
+    public Receipt(String emailSentTo, LocalDateTime sentDate, Donation donation) {
+        this.emailSentTo = emailSentTo;
+        this.sentDate = sentDate;
+        this.setDonation(donation);
+    }
+
     public Long getId() {
         return id;
     }
@@ -49,5 +57,8 @@ public class Receipt {
 
     public void setDonation(Donation donation) {
         this.donation = donation;
+        if (donation != null && donation.getReceipt() != this) {
+            donation.setReceipt(this);
+        }
     }
 }

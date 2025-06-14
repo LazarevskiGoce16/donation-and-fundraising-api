@@ -3,6 +3,7 @@ package com.example.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,15 +18,20 @@ public class Donor {
 
     @OneToMany(mappedBy = "donor", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Donation> donations;
+    private List<Donation> donations = new ArrayList<>();
 
     public Donor() {
     }
 
-    public Donor(String fullName, String email, String phone) {
+    public Donor(
+            String fullName,
+            String email,
+            String phone,
+            List<Donation> donations) {
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
+        this.donations = donations != null ? donations : new ArrayList<>();
     }
 
     public Long getId() {
@@ -66,5 +72,10 @@ public class Donor {
 
     public void setDonations(List<Donation> donations) {
         this.donations = donations;
+    }
+
+    public void addDonation(Donation donation) {
+        donations.add(donation);
+        donation.setDonor(this);
     }
 }

@@ -1,0 +1,94 @@
+---POST http://localhost:8080/campaigns---
+
+[
+  {
+    "title": "Clean Water for Villages",
+    "description": "Providing access to clean drinking water in rural areas.",
+    "goalAmount": 10000.0,
+    "startDate": "2024-01-01T00:00:00",
+    "endDate": "2024-12-31T23:59:59",
+    "donations": [
+      {
+        "amount": 250.0,
+        "donationTime": "2024-02-15T14:20:00"
+      },
+      {
+        "amount": 400.0,
+        "donationTime": "2024-03-10T11:00:00"
+      }
+    ]
+  },
+  {
+    "title": "Books for Kids",
+    "description": "Distributing educational books to underprivileged children.",
+    "goalAmount": 5000.0,
+    "startDate": "2025-03-01T00:00:00",
+    "endDate": "2025-06-30T23:59:59",
+    "donations": [
+      {
+        "amount": 100.0,
+        "donationTime": "2025-03-05T09:30:00"
+      },
+      {
+        "amount": 200.0,
+        "donationTime": "2025-04-01T16:45:00"
+      }
+    ]
+  },
+  {
+    "title": "Medical Aid for Refugees",
+    "description": "Raising funds to provide medical aid to refugees.",
+    "goalAmount": 20000.0,
+    "startDate": "2025-01-15T00:00:00",
+    "endDate": "2025-11-15T23:59:59",
+    "donations": [
+      {
+        "amount": 1000.0,
+        "donationTime": "2025-02-20T13:10:00"
+      },
+      {
+        "amount": 500.0,
+        "donationTime": "2025-03-11T17:00:00"
+      }
+    ]
+  }
+]
+
+---POST http://localhost:8080/donors---
+
+{
+  "fullName": "Aleksandar Petrov",
+  "email": "alek.petrov@example.com",
+  "phone": "+38970111222"
+}
+{
+  "fullName": "Marija Ivanova",
+  "email": "marija.ivanova@example.com",
+  "phone": "+38975123456"
+}
+
+---POST http://localhost:8080/donations---
+
+{
+  "amount": 333,
+  "donor_id": 1,
+  "campaign_id": 1
+}
+{
+  "amount": 555,
+  "donor_id": 2,
+  "campaign_id": 1
+}
+
+---POST http://localhost:8080/receipts---
+
+{
+  "emailSentTo": "alek.petrov@example.com",
+  "sentDate": "2025-06-04T16:00:00",
+  "donation": { "id": 1 }
+}
+{
+  "emailSentTo": "marija.ivanova@example.com",
+  "sentDate": "2025-06-03T11:00:00",
+  "donation": { "id": 2 }
+}
