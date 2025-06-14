@@ -26,13 +26,11 @@ public class DonationService {
 
     public Donation create(DonationRequestDto dto) {
         Campaign campaign = campaignService.findById(dto.getCampaignId());
-
         if (campaign == null) {
             throw new ResourceNotFoundException("Valid campaign must be provided");
         }
 
         Donor donor = donorService.findById(dto.getDonorId());
-
         if (donor == null) {
             throw new ResourceNotFoundException("Valid donor must be provided");
         }
@@ -42,7 +40,7 @@ public class DonationService {
                 campaign,
                 donor
         );
-         donationRepository.save(donation);
+        donationRepository.save(donation);
 
         return donation;
     }
@@ -58,5 +56,26 @@ public class DonationService {
     public Donation getById(Long donationId) {
         return donationRepository.findById(donationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Donation not found!"));
+    }
+
+    public Donation update(Long donationId, DonationRequestDto dto) {
+        Donation existingDonation = donationRepository.findById(donationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Donation not found!"));
+
+        Campaign campaign = campaignService.findById(dto.getCampaignId());
+        if (campaign == null) {
+            throw new ResourceNotFoundException("Valid campaign must be provided");
+        }
+
+        Donor donor = donorService.findById(dto.getDonorId());
+        if (donor == null) {
+            throw new ResourceNotFoundException("Valid donor must be provided");
+        }
+
+        existingDonation.setAmount(dto.getAmount());
+        existingDonation.setCampaign(campaign);
+        existingDonation.setDonor(donor);
+
+        return donationRepository.save(existingDonation);
     }
 }

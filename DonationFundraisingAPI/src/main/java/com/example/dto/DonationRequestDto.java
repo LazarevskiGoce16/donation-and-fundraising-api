@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public class DonationRequestDto {
-
     @NotNull
     @Positive(message = "Amount must be greater than zero")
     @JsonProperty("amount")

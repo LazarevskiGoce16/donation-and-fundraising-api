@@ -17,12 +17,6 @@ public class DonationController {
     @Autowired
     private DonationService donationService;
 
-    // TODO: Move to campaign controller
-//    @GetMapping
-//    public List<Donation> getAllDonationsByCampaign(@PathVariable Long campaignId) {
-//        return donationService.getDonationsForCampaign(campaignId);
-//    }
-
     @GetMapping
     public List<Donation> getAllDonations() {
         return donationService.getAll();
@@ -39,8 +33,13 @@ public class DonationController {
         return new ResponseEntity<>(donationService.create(dto), HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Donation> update(@Valid @PathVariable Long id, @RequestBody DonationRequestDto dto) {
+        return ResponseEntity.ok(donationService.update(id, dto));
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long campaignId, @PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         donationService.delete(id);
         return ResponseEntity.noContent().build();
     }
