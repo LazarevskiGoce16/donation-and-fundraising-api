@@ -1,7 +1,9 @@
 package com.example.controller;
 
+import com.example.dto.ReceiptRequestDto;
 import com.example.entity.Receipt;
 import com.example.service.ReceiptService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +28,8 @@ public class ReceiptController {
     }
 
     @PostMapping
-    public ResponseEntity<Receipt> create(@RequestBody Receipt request) {
-        Receipt receipt = receiptService.createReceipt(request.getDonation().getId(), request.getEmailSentTo());
-        return new ResponseEntity<>(receipt, HttpStatus.CREATED);
+    public ResponseEntity<Receipt> create(@Valid @RequestBody ReceiptRequestDto dto) {
+        return new ResponseEntity<>(receiptService.create(dto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

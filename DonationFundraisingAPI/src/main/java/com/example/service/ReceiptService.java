@@ -1,9 +1,9 @@
 package com.example.service;
 
+import com.example.dto.ReceiptRequestDto;
 import com.example.entity.Donation;
 import com.example.entity.Receipt;
 import com.example.exception.ResourceNotFoundException;
-import com.example.repository.DonationRepository;
 import com.example.repository.ReceiptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,18 +16,16 @@ public class ReceiptService {
     @Autowired
     private ReceiptRepository receiptRepository;
     @Autowired
-    private DonationRepository donationRepository;
+    private DonationService donationService;
 
-    public Receipt createReceipt(Long donationId, String email) {
-        Donation donation = donationRepository.findById(donationId)
-                .orElseThrow(() -> new ResourceNotFoundException("Donation not found!"));
+    public Receipt create(ReceiptRequestDto dto) {
+        Donation donation = donationService.getById(dto.getDonationId());
 
-        Receipt receipt = new Receipt();
-        receipt.setDonation(donation);
-        receipt.setEmailSentTo(email);
-        receipt.setSentDate(LocalDateTime.now());
-
-        // TODO: Add real email sending in future versions
+        Receipt receipt = new Receipt(
+                dto.getEmailSentTo(),
+                LocalDateTime.now(),
+                donation
+        );
 
         return receiptRepository.save(receipt);
     }
@@ -43,6 +41,5 @@ public class ReceiptService {
 
     public void delete(Long id) {
         receiptRepository.deleteById(id);
-
     }
 }
