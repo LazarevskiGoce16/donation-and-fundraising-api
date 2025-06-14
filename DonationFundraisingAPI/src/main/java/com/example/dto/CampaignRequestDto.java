@@ -28,43 +28,43 @@ public class CampaignRequestDto {
     @JsonAlias({"endDate", "end_date"})
     private String endDate;
 
-    public @NotBlank(message = "Title is required!") String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(@NotBlank(message = "Title is required!") String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public @NotBlank(message = "Description is required!") String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(@NotBlank(message = "Description is required!") String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public @NotNull @Positive(message = "Goal amount must be positive!") Double getGoalAmount() {
+    public Double getGoalAmount() {
         return goalAmount;
     }
 
-    public void setGoalAmount(@NotNull @Positive(message = "Goal amount must be positive!") Double goalAmount) {
+    public void setGoalAmount(Double goalAmount) {
         this.goalAmount = goalAmount;
     }
 
-    public @NotBlank(message = "Start date is required") String getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(@NotBlank(message = "Start date is required") String startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public @NotBlank(message = "End date is required") String getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(@NotBlank(message = "End date is required") String endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 }

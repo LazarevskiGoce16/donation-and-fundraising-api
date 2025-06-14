@@ -34,7 +34,7 @@ public class DonationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Donation> update(@Valid @PathVariable Long id, @RequestBody DonationRequestDto dto) {
+    public ResponseEntity<Donation> update(@PathVariable Long id, @Valid @RequestBody DonationRequestDto dto) {
         return ResponseEntity.ok(donationService.update(id, dto));
     }
 

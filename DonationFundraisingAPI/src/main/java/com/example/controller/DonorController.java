@@ -1,7 +1,9 @@
 package com.example.controller;
 
+import com.example.dto.DonorRequestDto;
 import com.example.entity.Donor;
 import com.example.service.DonorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +28,13 @@ public class DonorController {
     }
 
     @PostMapping
-    public ResponseEntity<Donor> create(@RequestBody Donor donor) {
-        donor.setId(null);
-        return new ResponseEntity<>(donorService.create(donor), HttpStatus.CREATED);
+    public ResponseEntity<Donor> create(@Valid @RequestBody DonorRequestDto dto) {
+        return new ResponseEntity<>(donorService.create(dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Donor> update(@PathVariable Long id, @RequestBody Donor donor) {
-        if (donor.getId() != null && !donor.getId().equals(id)) {
-            throw new IllegalArgumentException("ID in path and request body must match");
-        }
-        donor.setId(id);
-        return ResponseEntity.ok(donorService.update(id, donor));
+    public ResponseEntity<Donor> update(@PathVariable Long id, @Valid @RequestBody DonorRequestDto dto) {
+        return ResponseEntity.ok(donorService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")

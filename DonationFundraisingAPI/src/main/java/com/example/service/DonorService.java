@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dto.DonorRequestDto;
 import com.example.entity.Donor;
 import com.example.exception.ResourceNotFoundException;
 import com.example.repository.DonorRepository;
@@ -13,27 +14,37 @@ public class DonorService {
     @Autowired
     private DonorRepository donorRepository;
 
+    private Donor getOrThrow(Long id) {
+        return donorRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Donor not found!"));
+    }
+
     public List<Donor> findAll() {
         return donorRepository.findAll();
     }
 
     public Donor findById(Long id) {
-        return donorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Donor not found!"));
+        return getOrThrow(id);
     }
 
-    public Donor create(Donor donor) {
+    public Donor create(DonorRequestDto dto) {
+        Donor donor = new Donor();
+
+        donor.setFullName(dto.getFullName());
+        donor.setEmail(dto.getEmail());
+        donor.setPhone(dto.getPhone());
+
         return donorRepository.save(donor);
     }
 
-    public Donor update(Long id, Donor donorDetails) {
-        Donor donor = donorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Donor not found!"));
+    public Donor update(Long id, DonorRequestDto dto) {
+        Donor existingDonor = getOrThrow(id);
 
-        donor.setFullName(donorDetails.getFullName());
-        donor.setEmail(donorDetails.getEmail());
-        donor.setPhone(donorDetails.getPhone());
-        return donorRepository.save(donor);
+        existingDonor.setFullName(dto.getFullName());
+        existingDonor.setEmail(dto.getEmail());
+        existingDonor.setPhone(dto.getPhone());
+
+        return donorRepository.save(existingDonor);
     }
 
     public void delete(Long id) {
